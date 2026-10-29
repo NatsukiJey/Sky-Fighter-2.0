@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b16">
+  <title>Sky Fighter 2.0</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="#">✈ SKY<span>FIGHTER</span></a>
+    <div class="wallet">🪙 <span id="coins">0</span></div>
+    <nav>
+      <button id="shopBtn">✈ Hangar</button>
+      <button id="soundBtn">🔊 Ovoz</button>
+      <button id="pauseBtn">Ⅱ Pauza</button>
+    </nav>
+  </header>
+
+  <main class="layout">
+    <section class="game-panel">
+      <div class="hud">
+        <div><small>BOSQICH</small><strong id="level">1</strong></div>
+        <div><small>YO‘Q QILINGAN</small><strong id="kills">0</strong></div>
+        <div><small>NAVBATDAGI BOSS</small><strong id="bossIn">100</strong></div>
+        <div><small>REKORD</small><strong id="record">0</strong></div>
+      </div>
+
+      <div class="arena">
+        <canvas id="gameCanvas" aria-label="Samolyotlar jangi"></canvas>
+
+        <div id="bossHud" class="boss-hud hidden">
+          <div class="boss-label">👑 BOSS: <span id="bossName">TITAN</span></div>
+          <div class="boss-track"><div id="bossBar"></div></div>
+          <div id="bossHpText">1000 / 1000 HP</div>
+        </div>
+
+        <div id="startScreen" class="overlay">
+          <div class="dialog">
+            <div class="hero-icon">🚀</div>
+            <p class="eyebrow">ARCADE AIR COMBAT</p>
+            <h1>SKY FIGHTER <span>2.0</span></h1>
+            <p>Osmonga ko‘taril. Dushmanlarni yeng. Afsonaviy jangchiga aylan!</p>
+            <div class="feature-chips">
+              <span>✈️ 15 samolyot</span>
+              <span>👑 Bosslar</span>
+              <span>♾️ Cheksiz jang</span>
+            </div>
+            <button id="startBtn" class="primary">JANGNI BOSHLASH ▶</button>
+            <small>WASD / strelkalar · SPACE — o‘q uzish</small>
+          </div>
+        </div>
+
+        <div id="pauseScreen" class="overlay hidden">
+          <div class="dialog">
+            <div class="hero-icon">⏸️</div>
+            <h2>Jang vaqtincha to‘xtadi</h2>
+            <p>Samolyoting seni kutmoqda.</p>
+            <button id="resumeBtn" class="primary">DAVOM ETISH ▶</button>
+            <button id="pauseShopBtn" class="secondary">HANGAR OCHISH</button>
+          </div>
+        </div>
+
+        <div id="endScreen" class="overlay hidden">
+          <div class="dialog">
+            <div class="hero-icon">🛡️</div>
+            <h2>JANG YAKUNLANDI</h2>
+            <p>Bu safar <strong id="finalKills">0</strong> ta dushmanni yengding.</p>
+            <p>Olingan tangalar: <strong id="finalReward">0</strong> 🪙</p>
+            <button id="restartBtn" class="primary">QAYTA JANG ▶</button>
+            <button id="endShopBtn" class="secondary">HANGAR OCHISH</button>
+          </div>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <div class="touch-controls">
+          <div class="touch-arrows">
+            <button data-key="ArrowLeft">◀</button>
+            <div>
+              <button data-key="ArrowUp">▲</button>
+              <button data-key="ArrowDown">▼</button>
+            </div>
+            <button data-key="ArrowRight">▶</button>
+          </div>
+          <button id="touchFire" class="fire-button">FIRE 🔥</button>
+        </div>
+      </div>
+
+      <div class="battle-footer">
+        <div class="hp-heading">
+          <span>❤️ SAMOLYOT HOLATI</span>
+          <strong id="hpText">100 / 100</strong>
+        </div>
+        <div class="hp-track"><div id="hpBar"></div></div>
+        <div class="footer-info">
+          <span id="statusText">Jangga tayyor</span>
+          <span id="missionText">0 / 100</span>
+        </div>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="section-title">
+        <div>
+          <small>YOUR HANGAR</small>
+          <h2>Mening samolyotim</h2>
+        </div>
+        <span class="live-dot"></span>
+      </div>
+
+      <canvas id="previewCanvas" width="320" height="180"></canvas>
+      <h3 id="planeName">Falcon</h3>
+      <p id="planeDesc" class="muted">Boshlang‘ich qiruvchi samolyot</p>
+
+      <div class="stat"><span>❤️ HP</span><strong id="planeHp">100</strong></div>
+      <div class="stat"><span>💥 O‘q zarari</span><strong id="planeDamage">20</strong></div>
+      <div class="stat"><span>⚡ Tezlik</span><strong id="planeSpeed">4.5</strong></div>
+      <div class="stat"><span>🔫 Otish</span><strong id="planeFire">3/s</strong></div>
+
+      <button id="openShop" class="primary wide">✈️ SAMOLYOTLAR DO‘KONI</button>
+
+      <div class="section-title sub-title">
+        <div><small>JANG QOIDALARI</small><h2>Qanday o‘ynaladi?</h2></div>
+      </div>
+      <div class="instructions">
+        <p><kbd>W A S D</kbd> — harakat</p>
+        <p><kbd>↑ ↓ ← →</kbd> — harakat</p>
+        <p><kbd>SPACE</kbd> — o‘q uzish</p>
+        <p><kbd>ESC</kbd> — pauza</p>
+        <p>📱 Telefonda ekrandagi tugmalardan foydalan.</p>
+      </div>
+      <div class="save-note">💾 Taraqqiyoting brauzerda avtomatik saqlanadi.</div>
+    </aside>
+  </main>
+
+  <div id="shopModal" class="modal hidden">
+    <div class="shop-box">
+      <div class="shop-heading">
+        <div><small>AIRCRAFT COLLECTION</small><h2>✈️ SAMOLYOTLAR HANGARI</h2></div>
+        <button id="closeShop" class="close-btn">✕</button>
+      </div>
+      <p class="muted">15 ta samolyotdan o‘zingga mosini tanla. Jangda ishlab topilgan tangalar bilan xarid qil.</p>
+      <div id="shopGrid" class="shop-grid"></div>
+    </div>
+  </div>
+
+  <script src="./game.js"></script>
+</body>
+</html>
